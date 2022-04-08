@@ -1,0 +1,40 @@
+.rng-dice-button {
+    position: fixed; /* Fixed/sticky position */
+    bottom: 20px; /* Place the button at the bottom of the page */
+    right: 30px; /* Place the button 30px from the right */
+    z-index: 99; /* Make sure it does not overlap */
+    border-radius: 50%;  
+    object-fit: cover;
+    background-color: red; /* Set a background color */
+    cursor: pointer; /* Add a mouse pointer on hover */
+    height: 100px;
+    width: 100px;
+  }
+  
+.rng-dice-button:hover {
+    background-color: darkred;
+  }
+
+.spinning-border{
+    position: fixed; /* Fixed/sticky position */
+    bottom: 8px; /* Place the button at the bottom of the page */
+    right: 18px; /* Place the button 30px from the right */
+    z-index: 98; /* Make sure it does not overlap */
+    border-radius: 50%; 
+    border: 10px solid white;
+    border: 10px dashed red;
+    animation-name: spin;
+    animation-duration: 4000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    
+}
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}
+
