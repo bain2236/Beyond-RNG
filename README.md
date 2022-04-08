@@ -1,11 +1,8 @@
-# <img src="public/icons/icon_48.png" width="45" align="left"> Beyond Rng
-
-My Chrome Extension
+# <img src="public/icons/RNG-1-128.png" width="45" align="left"> Beyond Rng
 
 ## Features
 
-- Feature 1
-- Feature 2
+- Spell randomiser
 
 ## Install
 
