@@ -64,12 +64,24 @@ const randomItem = (items, onPage = false) => {
       );
       if (!$(randomItem).next().hasClass("more-info")) {
         const pageSlug = getPageSlug();
-        $.get(
-          `https://www.dndbeyond.com/${pageSlug}/${$(randomItem).attr(
+        let endpoint 
+        // equipment has a different setup
+        let itemDataUrl = $(randomItem).children(":first").attr("data-url")
+        if (itemDataUrl){
+          endpoint = itemDataUrl
+        }
+        // magic items/monster/spells use this
+        else{
+          endpoint = `/${pageSlug}/${$(randomItem).attr(
             "data-slug"
-          )}/more-info`,
+          )}/more-info`
+        }
+        $.get(
+          `https://www.dndbeyond.com${endpoint}`,
           function (data, status) {
-            const moreInfo = data.substring(data.indexOf("<div class="));
+            // due to script violation strip any scripts that come back with more info
+            const scriptRegex = /<script>[\s\S]*<\/script>/gm
+            const moreInfo = data.replace(scriptRegex, "")
             $(moreInfo).insertAfter(randomItem);
             $(randomItem)
               .find("#open-indicator")
