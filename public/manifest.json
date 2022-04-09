@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "description": "Random Roller for DNDBeyond",
   "icons": {
-    "128": "icons/RNG-1-128.png"
+    "128": "icons/RNG-logo128.png"
   },
   "permissions": [
 		"*://*.dndbeyond.com/*"
@@ -12,7 +12,8 @@
   "content_scripts": [
     {
       "matches": [
-				"https://www.dndbeyond.com/spells*"      
+				"https://www.dndbeyond.com/spells*" ,
+        "https://www.dndbeyond.com/magic-items*"           
 			],
       "js": ["contentScript.js"],
       "css": ["contentScript.css"]

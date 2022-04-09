@@ -42,45 +42,59 @@ const onCurrentPage = (pageNum) => {
 }
 
 /**
- * Selects a random spell from a list of spells
+ * Selects a random spell from a list of items
  * adds random spell to the listing of the spell page
  * adds in required click handler to said spell to get the more-info of said spell
- * @param {*} spells  jquery element with a bunch of spells
+ * @param {*} items  jquery element with a bunch of items
  */
-const randomSpell = (spells) => {
+const randomItem = (items) => {
   // TODO make this unique
-  const randomSpell = spells[Math.floor(Math.random() * spells.length)];
+  const randomItem = items[Math.floor(Math.random() * items.length)];
 
   // click
-  $(randomSpell).on("click", function () {
+  $(randomItem).on("click", function () {
     console.group("on click");
     $(this).toggleClass("silas-fleetfoot");
     $(this).attr(
       "data-isopen",
       $(this).attr("data-isopen") == "false" ? true : false
     );
-    const spellName = $(this).find(".spell-name .link").text();
-    spellName.replace(/\s+/g, "-").toLowerCase();
-    if (!$(randomSpell).next().hasClass("more-info")) {
-      const cleanName = spellName
+    // TODO FUCKERY TO GET THE NAME OF THE THING
+    let itemName
+    const item = $(this).find(".name .link");
+    if (item.children().length > 0){
+      // item has children, suspected magical item
+      console.log("suspected magical item", item.find("span").text())
+      itemName = item.find("span").text()
+    }
+    else{
+      itemName = item.text()
+    }
+    console.log("RANDOM ITEM", itemName);
+    itemName.replace(/\s+/g, "-").toLowerCase();
+    if (!$(randomItem).next().hasClass("more-info")) {
+      const cleanName = itemName
         .replace(/[^a-zA-Z\s]/g, "")
         .replace(/\s+/g, "-")
         .toLowerCase();
+      const pageSlug = getPageSlug()
+      // https://www.dndbeyond.com/magic-items/-staff-of-defense-/more-info
+      // https://www.dndbeyond.com/magic-items/staff-of-defense/more-info
       $.get(
-        `https://www.dndbeyond.com/spells/${cleanName}/more-info`,
+        `https://www.dndbeyond.com/${pageSlug}/${cleanName}/more-info`,
         function (data, status) {
           const trimmed = data.substring(data.indexOf("<div class="));
-          $(trimmed).insertAfter(randomSpell);
+          $(trimmed).insertAfter(randomItem);
         }
       );
     } else {
-      $(randomSpell).next().toggle();
+      $(randomItem).next().toggle();
     }
     console.groupEnd();
   });
 
   // hover
-  $(randomSpell)
+  $(randomItem)
     .on("mouseenter", function () {
       $(this).addClass("hover");
       $(this).addClass("samiphi-wobblecog");
@@ -90,10 +104,23 @@ const randomSpell = (spells) => {
       $(this).removeClass("samiphi-wobblecog");
     });
 
-  $(randomSpell).css("background-color", "red");
-  $(randomSpell).addClass("rng-injected");
-  $(".listing-body .listing").prepend(randomSpell);
-  console.log("RANDOM SPELL", $(randomSpell).find(".spell-name .link").text());
+  $(randomItem).css("background-color", "red");
+  $(randomItem).addClass("rng-injected");
+  $(".listing-body .listing").prepend(randomItem);
+
+}
+
+/**
+ * 
+ * @returns page slug
+ */
+const getPageSlug = () => {
+  const urlElements = window.location.href.split("/")
+  console.log(urlElements)
+  if(urlElements[3].includes("?")){
+    return urlElements[3].substring(0, urlElements[3].indexOf('?'))
+  }
+  return urlElements[3]
 }
 
 
@@ -102,6 +129,7 @@ const randomSpell = (spells) => {
  */
 const RNGMainButton = () => {
 
+  // add the button
   const button = $(`<img class='rng-dice-button' src='${logo}'></img>`);
   const spinningBorder = $(
     `<div class='spinning-border' style='height:124px;width:124px;'></div>`
@@ -132,7 +160,7 @@ const RNGMainButton = () => {
     // we are on a page and random page is 1 so we need ot strip the page query param
     // anything else
     if(onCurrentPage(randomPageNumber)){
-      randomSpell($(".listing").children());
+      randomItem($(".listing").children());
       spinningBorder.hide();
       return
     }
@@ -160,8 +188,8 @@ const RNGMainButton = () => {
       )
     }
     $("#rng-staging").load(`${randomPageToLoad} .listing`, function () {
-      const spells = $("#rng-staging .listing").children();
-      randomSpell(spells);
+      const items = $("#rng-staging .listing").children();
+      randomItem(items);
       spinningBorder.hide();
     });
   });
@@ -172,4 +200,5 @@ const RNGMainButton = () => {
 
 
 // main entrypoint of this extension
+
 RNGMainButton()
