@@ -13,7 +13,8 @@
     {
       "matches": [
 				"https://www.dndbeyond.com/spells*" ,
-        "https://www.dndbeyond.com/magic-items*"           
+        "https://www.dndbeyond.com/magic-items*",
+        "https://www.dndbeyond.com/monsters*"            
 			],
       "js": ["contentScript.js"],
       "css": ["contentScript.css"]
