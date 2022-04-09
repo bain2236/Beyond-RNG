@@ -14,7 +14,8 @@
       "matches": [
 				"https://www.dndbeyond.com/spells*" ,
         "https://www.dndbeyond.com/magic-items*",
-        "https://www.dndbeyond.com/monsters*"            
+        "https://www.dndbeyond.com/monsters*",
+        "https://www.dndbeyond.com/equipment*"
 			],
       "js": ["contentScript.js"],
       "css": ["contentScript.css"]
