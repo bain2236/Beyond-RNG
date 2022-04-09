@@ -17,7 +17,8 @@
         "https://www.dndbeyond.com/monsters*",
         "https://www.dndbeyond.com/equipment*",
         "https://www.dndbeyond.com/feats*",
-        "https://www.dndbeyond.com/backgrounds*"
+        "https://www.dndbeyond.com/backgrounds*",
+        "https://www.dndbeyond.com/homebrew*"
 			],
       "js": ["contentScript.js"],
       "css": ["contentScript.css"]

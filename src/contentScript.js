@@ -71,16 +71,24 @@ const randomItem = (items, onPage = false) => {
           endpoint = itemDataUrl
         }
         // magic items/monster/spells use this
-        else{
+        else if ($(randomItem).attr("data-slug")){
           endpoint = `/${pageSlug}/${$(randomItem).attr(
             "data-slug"
           )}/more-info`
         }
+        // homebrew items data slug lives in the first child
+        else{
+          endpoint = `/${pageSlug}/${$(randomItem).children(":first").attr(
+            "data-slug"
+          )}/more-info`
+        }
+        // https://www.dndbeyond.com/homebrew/monsters/837230-strawbearry/more-info 404
+        // https://www.dndbeyond.com/monsters/837230-strawbearry/more-info
         $.get(
           `https://www.dndbeyond.com${endpoint}`,
           function (data, status) {
             // due to script violation strip any scripts that come back with more info
-            const scriptRegex = /<script>[\s\S]*<\/script>/gm
+            const scriptRegex = /<script>[\s\S]*?<\/script>/gm
             const moreInfo = data.replace(scriptRegex, "")
             $(moreInfo).insertAfter(randomItem);
             $(randomItem)
@@ -132,6 +140,12 @@ const randomItem = (items, onPage = false) => {
  */
 const getPageSlug = () => {
   const urlElements = window.location.href.split("/");
+ 
+  // replace homebrew with whatever the next element is
+  if(urlElements[3] === "homebrew"){
+    urlElements[3] = urlElements[4]
+  }
+
   if (urlElements[3].includes("?")) {
     return urlElements[3].substring(0, urlElements[3].indexOf("?"));
   }
