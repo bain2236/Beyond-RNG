@@ -47,11 +47,13 @@ const onCurrentPage = (pageNum) => {
  * @param {*} items  jquery element with a bunch of items
  */
 const randomItem = (items, onPage = false) => {
-  // TODO make this unique
+  // TODO items when onPage can be the already selected random items causing "nothing" to happen
+  // think about this is good and if it is do something to show the user so it doesn't feel like "my click didn't do shit"
   const randomItem = items[Math.floor(Math.random() * items.length)];
-
+  console.log("adding item", randomItem);
   // when the random item is on this page it already has events
   if (!onPage) {
+    console.log("Adding click handler to mimic DNDBeyond more-info");
     // click
     $(randomItem).on("click", function () {
       console.group("on click");
@@ -60,33 +62,36 @@ const randomItem = (items, onPage = false) => {
         "data-isopen",
         $(this).attr("data-isopen") == "false" ? true : false
       );
-      // get the item name then clean it up before using it to get "more-info"
-      let itemName;
-      const item = $(this).find(".name .link");
-      if (item.children().length > 0) {
-        // item has children, suspected magical item
-        console.log("suspected magical item", item.find("span").text());
-        itemName = item.find("span").text();
-      } else {
-        itemName = item.text();
-      }
-      console.log("RANDOM ITEM", itemName);
-      itemName.replace(/\s+/g, "-").toLowerCase();
       if (!$(randomItem).next().hasClass("more-info")) {
-        const cleanName = itemName
-          .replace(/[^a-zA-Z\s-]/g, "")
-          .replace(/\s+/g, "-")
-          .toLowerCase();
         const pageSlug = getPageSlug();
         $.get(
-          `https://www.dndbeyond.com/${pageSlug}/${cleanName}/more-info`,
+          `https://www.dndbeyond.com/${pageSlug}/${$(randomItem).attr(
+            "data-slug"
+          )}/more-info`,
           function (data, status) {
             const moreInfo = data.substring(data.indexOf("<div class="));
             $(moreInfo).insertAfter(randomItem);
+            $(randomItem)
+              .find("#open-indicator")
+              .addClass("minus")
+              .removeClass("plus");
           }
         );
       } else {
+        // toggle visibility
         $(randomItem).next().toggle();
+        // toggle plus minus sign
+        if ($(randomItem).find("#open-indicator").hasClass("minus")) {
+          $(randomItem)
+            .find("#open-indicator")
+            .addClass("plus")
+            .removeClass("minus");
+        } else {
+          $(randomItem)
+            .find("#open-indicator")
+            .addClass("minus")
+            .removeClass("plus");
+        }
       }
 
       console.groupEnd();
@@ -115,7 +120,6 @@ const randomItem = (items, onPage = false) => {
  */
 const getPageSlug = () => {
   const urlElements = window.location.href.split("/");
-  console.log(urlElements);
   if (urlElements[3].includes("?")) {
     return urlElements[3].substring(0, urlElements[3].indexOf("?"));
   }
@@ -134,6 +138,7 @@ const RNGMainButton = () => {
   spinningBorder.hide();
 
   button.on("click", () => {
+    console.group("RNG MAIN CLICK");
     spinningBorder.show();
     // create staging area
     if (!$(".page-header").find("#rng-staging").length) {
@@ -159,6 +164,7 @@ const RNGMainButton = () => {
     if (onCurrentPage(randomPageNumber)) {
       randomItem($(".listing").children(), true);
       spinningBorder.hide();
+      console.groupEnd();
       return;
     } else if (!match) {
       // on page 1
@@ -185,6 +191,7 @@ const RNGMainButton = () => {
       randomItem(items);
       spinningBorder.hide();
     });
+    console.groupEnd();
   });
   $(".page-header").append(button);
   spinningBorder.insertAfter(button);
