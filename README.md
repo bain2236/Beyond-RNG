@@ -1,16 +1,35 @@
-# <img src="public/icons/RNG-1-128.png" width="45" align="left"> Beyond Rng
+# <img src="public/icons/RNG-logo128.png" width="45" align="left"> Beyond Rng
+
+[Video description](https://youtu.be/q5j9VcK7RWQ)
 
 ## Features
+Adds a randomiser to the following pages on DNDBeyond
+- Spells
+- Monsters
+- Magic Items
+- Feats
+- Backgrounds
+- Equipment
 
-- Spell randomiser
+It also includes the same functionality for homebrew items on the following pages
+- Spells
+- Monsters
+- Magic Items
+- Feats
+- Backgrounds
+- Subclasses
+- Races
 
 ## Install
 
-[**Chrome** extension]() <!-- TODO: Add chrome extension link inside parenthesis -->
+[**Chrome** extension]() awaiting release <!-- TODO: Add chrome extension link inside parenthesis -->
 
 ## Contribution
 
 Suggestions and pull requests are welcomed!.
+
+## Support
+[Buy me a coffee](paypal.me/baindev)
 
 ---
 
