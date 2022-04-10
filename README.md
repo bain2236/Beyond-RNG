@@ -1,6 +1,7 @@
 # <img src="public/icons/RNG-logo128.png" width="45" align="left"> Beyond Rng
 
-[Video description](https://youtu.be/q5j9VcK7RWQ)
+## Video Description
+[![Video description](https://img.youtube.com/vi/q5j9VcK7RWQ/0.jpg)](https://www.youtube.com/watch?v=q5j9VcK7RWQ)
 
 ## Features
 Adds a randomiser to the following pages on DNDBeyond
