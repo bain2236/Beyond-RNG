@@ -90,12 +90,39 @@ const randomItem = (items, onPage = false) => {
             // due to script violation strip any scripts that come back with more info
             const scriptRegex = /<script>[\s\S]*?<\/script>/gm
             const moreInfo = data.replace(scriptRegex, "")
+            $(moreInfo).find(".toggle-in-collection").prop('disabled', true);
+            $(moreInfo).find(".modal-link").prop('disabled', true);
+            $(moreInfo).find(".rating-up").prop('disabled', true);
+            $(moreInfo).find(".rating-down").prop('disabled', true);
             $(moreInfo).insertAfter(randomItem);
             $(randomItem)
               .find("#open-indicator")
               .addClass("minus")
               .removeClass("plus");
+              console.log($(randomItem).next().find(".ajax-post"))
+
+            const addToCollectionButton = $(randomItem).next().find(".toggle-button")
+            addToCollectionButton.attr("title","Disabled, use view details page")
+            addToCollectionButton.find(".toggle-in-collection").css("background-color","grey")
+            addToCollectionButton.css("pointer-events","none")             
+            addToCollectionButton.css("cursor","default")
+
+            const reportButton = $(randomItem).next().find(".report-button")
+            reportButton.attr("title","Disabled, use view details page")
+            reportButton.find("a").css("background", "grey")
+            reportButton.css("pointer-events","none")             
+            reportButton.css("cursor","default")
+
+            const ratingsButtons = $(randomItem).next().find(".rating-form")
+            $(randomItem).next().find(".rating-form :input").attr("disabled","disabled");
+            ratingsButtons.attr("title","Disabled, use view details page")
+            ratingsButtons.find(".rating-up").css("background-color", "grey")
+            ratingsButtons.find(".rating-down").css("background-color", "grey")
+            
+            $(randomItem).next().find(".homebrew-details-footer").attr("title", "Disabled in RNG, please use view details page")
+            
           }
+          
         );
       } else {
         // toggle visibility

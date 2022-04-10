@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Beyond RNG",
-  "version": "0.1.0",
-  "description": "Random Roller for DNDBeyond",
+  "version": "1.0.0",
+  "description": "Randomiser for DNDBeyond",
   "icons": {
     "128": "icons/RNG-logo128.png"
   },
