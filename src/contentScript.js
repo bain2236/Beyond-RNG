@@ -71,23 +71,58 @@ const randomItem = (items, onPage = false) => {
           endpoint = itemDataUrl
         }
         // magic items/monster/spells use this
-        else{
+        else if ($(randomItem).attr("data-slug")){
           endpoint = `/${pageSlug}/${$(randomItem).attr(
             "data-slug"
           )}/more-info`
         }
+        // homebrew items data slug lives in the first child
+        else{
+          endpoint = `/${pageSlug}/${$(randomItem).children(":first").attr(
+            "data-slug"
+          )}/more-info`
+        }
+        // https://www.dndbeyond.com/homebrew/monsters/837230-strawbearry/more-info 404
+        // https://www.dndbeyond.com/monsters/837230-strawbearry/more-info
         $.get(
           `https://www.dndbeyond.com${endpoint}`,
           function (data, status) {
             // due to script violation strip any scripts that come back with more info
-            const scriptRegex = /<script>[\s\S]*<\/script>/gm
+            const scriptRegex = /<script>[\s\S]*?<\/script>/gm
             const moreInfo = data.replace(scriptRegex, "")
+            $(moreInfo).find(".toggle-in-collection").prop('disabled', true);
+            $(moreInfo).find(".modal-link").prop('disabled', true);
+            $(moreInfo).find(".rating-up").prop('disabled', true);
+            $(moreInfo).find(".rating-down").prop('disabled', true);
             $(moreInfo).insertAfter(randomItem);
             $(randomItem)
               .find("#open-indicator")
               .addClass("minus")
               .removeClass("plus");
+              console.log($(randomItem).next().find(".ajax-post"))
+
+            const addToCollectionButton = $(randomItem).next().find(".toggle-button")
+            addToCollectionButton.attr("title","Disabled, use view details page")
+            addToCollectionButton.find(".toggle-in-collection").css("background-color","grey")
+            addToCollectionButton.css("pointer-events","none")             
+            addToCollectionButton.css("cursor","default")
+
+            const reportButton = $(randomItem).next().find(".report-button")
+            reportButton.attr("title","Disabled, use view details page")
+            reportButton.find("a").css("background", "grey")
+            reportButton.css("pointer-events","none")             
+            reportButton.css("cursor","default")
+
+            const ratingsButtons = $(randomItem).next().find(".rating-form")
+            $(randomItem).next().find(".rating-form :input").attr("disabled","disabled");
+            ratingsButtons.attr("title","Disabled, use view details page")
+            ratingsButtons.find(".rating-up").css("background-color", "grey")
+            ratingsButtons.find(".rating-down").css("background-color", "grey")
+            
+            $(randomItem).next().find(".homebrew-details-footer").attr("title", "Disabled in RNG, please use view details page")
+            
           }
+          
         );
       } else {
         // toggle visibility
@@ -132,6 +167,12 @@ const randomItem = (items, onPage = false) => {
  */
 const getPageSlug = () => {
   const urlElements = window.location.href.split("/");
+ 
+  // replace homebrew with whatever the next element is
+  if(urlElements[3] === "homebrew"){
+    urlElements[3] = urlElements[4]
+  }
+
   if (urlElements[3].includes("?")) {
     return urlElements[3].substring(0, urlElements[3].indexOf("?"));
   }
