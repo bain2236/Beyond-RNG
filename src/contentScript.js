@@ -250,5 +250,12 @@ const RNGMainButton = () => {
   spinningBorder.insertAfter(button);
 };
 
+console.log("RNG LOADED")
 // main entrypoint of this extension
-RNGMainButton();
+// don't render the button on detail pages, details pages have comment sections
+if ($(".homebrew-comments").length){
+  console.log($("on details page"))
+}
+else{
+  RNGMainButton();
+}
