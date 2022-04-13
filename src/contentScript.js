@@ -117,10 +117,9 @@ const randomItem = (items, onPage = false) => {
             $(randomItem).next().find(".rating-form :input").attr("disabled","disabled");
             ratingsButtons.attr("title","Disabled, use view details page")
             ratingsButtons.find(".rating-up").css("background-color", "grey")
+            ratingsButtons.find(".rating-up input").attr("title", "Disabled in RNG, please use view details page")
             ratingsButtons.find(".rating-down").css("background-color", "grey")
-            
-            $(randomItem).next().find(".homebrew-details-footer").attr("title", "Disabled in RNG, please use view details page")
-            
+            ratingsButtons.find(".rating-down input").attr("title", "Disabled in RNG, please use view details page")
           }
           
         );
